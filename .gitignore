@@ -1,0 +1,12 @@
+# Node modules
+node_modules/
+
+# Parcel cache
+.parcel-cache/
+
+# Logs
+logs
+*.log
+
+# Environment variables
+.env
