@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const Home = (props) => {
   const navigate=useNavigate();
-  if(localStorage.getItem('token')===null){
-    navigate('/login');
-  }
+  
 
+  useEffect(() => {
+    if (localStorage.getItem('token')===null) {
+      navigate('/login');
+    }
+  }, [localStorage.getItem('token')===null]);
 
   const handleOnClickAdmin = async (e) => {
     e.preventDefault();
@@ -69,9 +72,9 @@ const Home = (props) => {
 
   return (
     <>
-      <button type="button" onClick={handleOnClickAdmin} name="admin" class="btn btn-secondary btn-lg">Admin endpoint</button>
-      <button type="button" onClick={handleOnClickUser} name="user" class="btn btn-secondary btn-lg">User endpoint</button>
-      <button type="button" onClick={handleOnClickModerator} name="moderator" class="btn btn-secondary btn-lg">Moderator endpoint</button>
+      <button type="button" onClick={handleOnClickAdmin} name="admin" className="btn btn-secondary btn-lg">Admin endpoint</button>
+      <button type="button" onClick={handleOnClickUser} name="user" className="btn btn-secondary btn-lg">User endpoint</button>
+      <button type="button" onClick={handleOnClickModerator} name="moderator" className="btn btn-secondary btn-lg">Moderator endpoint</button>
     </>
   )
 }
