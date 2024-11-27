@@ -53,6 +53,7 @@ router.post('/signin',async(req,res)=>{
         }
         const comparePassword=await bcrypt.compare(req.body.password,user.password);
         if (!comparePassword) {
+            login=false;
             return res.status(422).json({login});
         }
         const data={
