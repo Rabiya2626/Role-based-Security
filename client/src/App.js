@@ -11,7 +11,7 @@ function App() {
       <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route exact path='/' element={<Home />}></Route>
+            <Route exact path='/' element={<Home host={host} />}></Route>
             <Route exact path='/login'  element={<Login host={host}/>}></Route>
             <Route exact path='/signup' element={<Signup  host={host}/>}></Route>
           </Routes>

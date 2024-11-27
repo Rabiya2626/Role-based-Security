@@ -27,7 +27,7 @@ const Login = (props) => {
         const response=await res.json();
         localStorage.setItem('token',response.authenticationToken);
         if(response.login){
-            navigate('/home');
+            navigate('/');
         }   
         else{
             alert("Credentials are wrong");

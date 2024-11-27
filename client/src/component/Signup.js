@@ -50,7 +50,7 @@ const navigate=useNavigate();
         });
         const response = await res.json();
         localStorage.setItem('token', response.authenticationToken);
-        navigate('/home');
+        navigate('/');
     }
 
     return (

@@ -13,7 +13,7 @@ const Navbar = () => {
       const handleLogout=(e)=>{
         e.preventDefault();
         localStorage.removeItem('token');
-        navigate('/home');
+        navigate('/');
       }
     return (
         <>
