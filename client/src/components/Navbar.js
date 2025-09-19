@@ -1,29 +1,28 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
 
-const Navbar = () => {
-  const navigate = useNavigate();
-  const type = localStorage.getItem('type');
+export default function Navbar() {
+  const token = localStorage.getItem("token");
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('type');
-    alert('Logged out successfully');
-    navigate('/login');
+    localStorage.clear();
+    window.location.href = "/login";
   };
 
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#222', color: 'white' }}>
+    <nav style={{ display: "flex", justifyContent: "space-between", padding: "10px 20px", background: "#007bff", color: "white" }}>
       <h2>Role-Based App</h2>
       <div>
-        <Link to="/" style={{ color: 'white', marginRight: '1rem' }}>Home</Link>
-        {!type && <Link to="/login" style={{ color: 'white', marginRight: '1rem' }}>Login</Link>}
-        {!type && <Link to="/signup" style={{ color: 'white', marginRight: '1rem' }}>Signup</Link>}
-        {type && <span style={{ marginRight: '1rem' }}>Role: {type}</span>}
-        {type && <button onClick={handleLogout} style={{ padding: '0.3rem 0.7rem', borderRadius: '0.5rem', border: 'none', cursor: 'pointer' }}>Logout</button>}
+        {!token ? (
+          <>
+            <a href="/login" style={{ color: "white", marginRight: "10px" }}>Login</a>
+            <a href="/signup" style={{ color: "white" }}>Sign Up</a>
+          </>
+        ) : (
+          <button onClick={handleLogout} style={{ padding: "5px 10px", background: "#dc3545", border: "none", color: "white", borderRadius: "4px", cursor: "pointer" }}>
+            Logout
+          </button>
+        )}
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

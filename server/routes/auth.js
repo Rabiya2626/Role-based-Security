@@ -1,78 +1,44 @@
-const express=require('express');
-const router=express.Router();
-const User=require('../database/schema/User');
-const bcrypt=require('bcrypt');
-const jwt=require('jsonwebtoken');
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../database/schema/User");
 
+// Signup
+router.post("/signup", async (req, res) => {
+  const { name, email, password, type } = req.body;
+  try {
+    const existing = await User.findOne({ email });
+    if (existing) return res.status(400).json({ message: "User already exists" });
 
-const secretKey=process.env.JWT_AUTHENTICATION_KEY;
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
 
-router.post('/signup',async(req,res)=>{
-    let execution=true;
-    try {
-        let userisPresent=false;
-        let user=await User.findOne({email:req.body.email});
-        if(user){
-            userisPresent=true;
-            return res.status(422).json({userisPresent});
-        }
-
-        //password hashing 
-        const salt= await bcrypt.genSalt(10);
-        const securePassword=await bcrypt.hash(req.body.password,salt);
-        user=await User.create({
-            name:req.body.name,
-            email:req.body.email,
-            type:req.body.type,
-            password:securePassword
-        });
-
-        const data={
-            user:{
-                id:user.id,
-                type:user.type
-            }
-        };
-        const authenticationToken=jwt.sign(data,secretKey);
-        res.status(200).json({userisPresent,execution,authenticationToken});
-
-    } catch (error) {
-        
-    }
+    const user = new User({ name, email, password: hash, type });
+    await user.save();
+    res.status(201).json({ message: "Account created!" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-//signin of the user
-router.post('/signin',async(req,res)=>{
-    let execution=true;
-    try {
-        let login=true;
-        let user=await User.findOne({email:req.body.email});
-        if(!user){
-            login=false;
-            res.status(404).json({login})
-        }
-        const comparePassword=await bcrypt.compare(req.body.password,user.password);
-        if (!comparePassword) {
-            login=false;
-            return res.status(422).json({login});
-        }
-        const data={
-            user:{
-                id:user.id,
-                type:user.type
-            }
-        };
-        const authenticationToken=jwt.sign(data,secretKey);
-        res.status(200).json({execution,login,authenticationToken});
+// Login
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "No account found" });
 
-    } catch (error) {
-        execution=false;
-        res.status(500).json({execution});
-    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+
+    const payload = { userId: user._id, type: user.type };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    res.json({ message: "Login success", token, type: user.type, userId: user._id });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-
-
-
-
-module.exports=router;
+module.exports = router;
