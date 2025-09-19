@@ -33,29 +33,6 @@ Authentication: JWT, bcrypt
 
 Other: CORS, dotenv
 
-📂 Folder Structure
-role-based-security/
-│
-├─ server/
-│   ├─ database/schema/User.js
-│   ├─ routes/profile.js
-│   ├─ routes/users.js
-│   ├─ index.js
-│   └─ .env
-│
-├─ client/
-│   ├─ src/
-│   │   ├─ components/
-│   │   │   ├─ Login.js
-│   │   │   ├─ Signup.js
-│   │   │   ├─ UserProfile.js
-│   │   │   ├─ AdminDashboard.js
-│   │   │   └─ ManagerDashboard.js
-│   │   ├─ App.js
-│   │   └─ index.js
-│   └─ package.json
-└─ README.md
-
 
 ⚡ Setup & Installation
 Backend
